@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node ./core/crud.js",
-    "dev": "nodemon ./core/crud.js",
+    "start:crud": "npx ts-node ./core/crud.ts",
+    "dev:crud": "nodemon --ext ts,tsx --exec 'npm run start:crud'",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint './**/*.{jsx,jsx,ts,tsx}'",
+    "lint:fix": "npm run lint -- --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,6 +17,23 @@
   "license": "ISC",
   "description": "Projeto CRUD com qualidade do Dev Soutinho",
   "devDependencies": {
-    "nodemon": "^3.1.4"
+    "@types/react": "18.3.3",
+    "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.2",
+    "nodemon": "^3.1.4",
+    "prettier": "^2.8.7"
+  },
+  "dependencies": {
+    "@types/node": "^20.14.11",
+    "styled-jsx": "^5.1.6",
+    "typescript": "^5.2.0",
+    "uuid": "^10.0.0"
   }
 }

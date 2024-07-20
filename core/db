@@ -1,1 +1,16 @@
-hoje eu to asdfadsf legal aaaaaa
+{
+  "todos": [
+    {
+      "id": "c33af88f-31b1-4209-83f8-0daa2a46fc44",
+      "date": "2024-07-20T18:52:19.667Z",
+      "content": "primeira TODO",
+      "done": false
+    },
+    {
+      "id": "6c20e0ed-5467-4720-b2a2-b8f316050772",
+      "date": "2024-07-20T18:52:19.668Z",
+      "content": "aaaaa",
+      "done": false
+    }
+  ]
+}
