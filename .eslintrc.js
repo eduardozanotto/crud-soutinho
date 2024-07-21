@@ -21,6 +21,7 @@ module.exports = {
       react: {
         version: "detect",
       },
+      "import/core-modules": ["styled-jsx/css"],
     },
     ignorePatterns: ["node_modules/"],
     rules: {
