@@ -104,12 +104,12 @@ CLEAR_DB();
 
 create("primeira TODO");
 
-const secondTodo = create("segunda TODO");
+create("segunda TODO");
 
-deleteByTodo(secondTodo.id);
+//deleteByTodo(secondTodo.id);
 
 const terceiraTodo = create("segunda TODO");
 
 updateContentById(terceiraTodo.id, "aaaaa");
 
-console.log("CRUD", read());
+//console.log("CRUD", read());
