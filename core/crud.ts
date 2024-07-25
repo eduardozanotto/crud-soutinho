@@ -13,7 +13,7 @@ interface Todo {
   done: boolean;
 }
 
-function create(content: string): Todo {
+export function create(content: string): Todo {
   const todo: Todo = {
     id: uuid(),
     date: new Date().toISOString(),
@@ -38,7 +38,7 @@ export function read(): Array<Todo> {
   return db.todos;
 }
 
-function update(id: UUID, partilTodo: Partial<Todo>) {
+export function update(id: UUID, partilTodo: Partial<Todo>) {
   let updatedTodo;
   const todos = read();
   todos.forEach((currentTodo) => {
@@ -100,16 +100,16 @@ function CLEAR_DB() {
   fs.writeFileSync(DB_FILE_PATH, "");
 }
 
-CLEAR_DB();
+//CLEAR_DB();
 
-create("primeira TODO");
+//create("primeira TODO");
 
-create("segunda TODO");
+//create("segunda TODO");
 
 //deleteByTodo(secondTodo.id);
 
-const terceiraTodo = create("segunda TODO");
+//const terceiraTodo = create("segunda TODO");
 
-updateContentById(terceiraTodo.id, "aaaaa");
+//updateContentById(terceiraTodo.id, "aaaaa");
 
 //console.log("CRUD", read());

@@ -1,6 +1,7 @@
 import { todoRepository } from "@server/repository/todo";
+import { z as schema } from "zod";
 
-function get(req: Request, res: Response) {
+async function get(req: Request) {
   const { searchParams } = new URL(req.url);
   const query = {
     page: searchParams.get("page"),
@@ -47,6 +48,70 @@ function get(req: Request, res: Response) {
   );
 }
 
+const TodoCreateSchema = schema.object({
+  content: schema.string(),
+});
+
+async function create(req: Request) {
+  const body = await req.json();
+  const bodySchema = TodoCreateSchema.safeParse(body);
+
+  if (!bodySchema.success) {
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "You must provide a content!",
+          description: bodySchema.error.issues,
+        },
+      }),
+      {
+        status: 400,
+      }
+    );
+  }
+  const createdTodo = await todoRepository.createByContent(
+    bodySchema.data.content
+  );
+
+  return new Response(
+    JSON.stringify({
+      todo: createdTodo,
+    }),
+    {
+      status: 201,
+    }
+  );
+}
+
+async function toggleDone(req: Request, todoId: string, res: Response) {
+  const updateTodo = { id: todoId };
+
+  if (!todoId || typeof todoId !== "string") {
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "You must provide an ID!",
+        },
+      }),
+      {
+        status: 400,
+      }
+    );
+  }
+  todoRepository.toggleDone(todoId);
+
+  return new Response(
+    JSON.stringify({
+      todo: updateTodo,
+    }),
+    {
+      status: 200,
+    }
+  );
+}
+
 export const todoController = {
   get,
+  create,
+  toggleDone,
 };

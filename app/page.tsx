@@ -18,8 +18,16 @@ export default function Page() {
   const [page, setPage] = React.useState(1);
   const [todos, setTodos] = React.useState<HomeTodo[]>([]);
   const [totalPages, setTotalPages] = React.useState(0);
+  const [search, setSearch] = React.useState("");
+  const [newTodoContent, setTodoNewContent] = React.useState("");
+
+  const actualTodos = todoController.filterTodosByContent<HomeTodo>(
+    todos,
+    search
+  );
+
   const hasMorePages = totalPages > page;
-  const hasNoTodos = todos.length == 0 && !isLoading;
+  const hasNoTodos = actualTodos.length == 0 && !isLoading;
 
   React.useEffect(() => {
     if (!initialLoadComplete.current) {
@@ -46,8 +54,31 @@ export default function Page() {
         <div className="typewriter">
           <h1>O que fazer hoje?</h1>
         </div>
-        <form>
-          <input type="text" placeholder="Correr, Estudar..." />
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            todoController.create({
+              content: newTodoContent,
+              onSuccess(todo: HomeTodo) {
+                setTodos((oldTodos) => {
+                  return [todo, ...oldTodos];
+                });
+                setTodoNewContent("");
+              },
+              onError(errorMessage) {
+                alert(errorMessage || "");
+              },
+            });
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Correr, Estudar..."
+            value={newTodoContent}
+            onChange={function newTodoHandler(event) {
+              setTodoNewContent(event.target.value);
+            }}
+          />
           <button type="submit" aria-label="Adicionar novo item">
             +
           </button>
@@ -56,7 +87,13 @@ export default function Page() {
 
       <section>
         <form>
-          <input type="text" placeholder="Filtrar lista atual, ex: Dentista" />
+          <input
+            type="text"
+            placeholder="Filtrar lista atual, ex: Dentista"
+            onChange={function handleSearch(event) {
+              setSearch(event.target.value);
+            }}
+          />
         </form>
 
         <table border={1}>
@@ -72,7 +109,7 @@ export default function Page() {
           </thead>
 
           <tbody>
-            {todos.map((currentTodo) => {
+            {actualTodos.map((currentTodo) => {
               return (
                 <tr key={currentTodo.id}>
                   <td>

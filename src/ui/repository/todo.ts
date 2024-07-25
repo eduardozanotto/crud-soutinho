@@ -1,3 +1,6 @@
+import { Todo, TodoSchema } from "@ui/schema/todo";
+import { z as schema } from "zod";
+
 interface TodoRepositoryGetParams {
   page: number;
   limit: number;
@@ -26,16 +29,35 @@ export async function get({
   );
 }
 
+export async function createByContent(content: string): Promise<Todo> {
+  const response = await fetch("/api/todos", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      content,
+    }),
+  });
+  if (response.ok) {
+    const serverResponse = await response.json();
+    const ServerResponseSchema = schema.object({
+      todo: TodoSchema,
+    });
+    const serverResponseParsed = ServerResponseSchema.safeParse(serverResponse);
+    if (!serverResponseParsed.success) {
+      throw new Error("Failed to create todo!");
+    }
+    const todo = serverResponseParsed.data.todo;
+    return todo;
+  }
+  throw new Error("Failed to create todo!");
+}
+
 export const todoRepository = {
   get,
+  createByContent,
 };
-
-interface Todo {
-  id: string;
-  content: string;
-  date: Date;
-  done: boolean;
-}
 
 function parseTodosFromServer(responseBody: unknown): {
   total: number;
@@ -67,7 +89,7 @@ function parseTodosFromServer(responseBody: unknown): {
         return {
           id,
           content,
-          date: new Date(date),
+          date: date,
           done: String(done).toLocaleLowerCase() === "true",
         };
       }),
